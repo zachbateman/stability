@@ -5,8 +5,6 @@ import tkinter
 from stability.tools import dup_finder
 
 
-
-
 class GUI(tkinter.Frame):
     
     def __init__(self, root, *args, **kwargs):
