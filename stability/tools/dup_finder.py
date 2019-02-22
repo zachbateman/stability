@@ -8,7 +8,7 @@ def find_dup(parent_folder):
     # Dups in format {hash:[names]}
     dups = {}
     for dir_name, subdirs, file_list in os.walk(parent_folder):
-        print('Scanning %s...' % dir_name)
+        print(f'Scanning {dir_name}...' % dir_name)
         for filename in file_list:
             path = os.path.join(dir_name, filename)  # Get the path to the file
             file_hash = hashfile(path)  # Calculate hash
@@ -40,8 +40,8 @@ def hashfile(path, blocksize=65536):
     return hasher.hexdigest()
 
 
-def print_results(dict1):
-    results = list(filter(lambda x: len(x) > 1, dict1.values()))
+def print_results(dict):
+    results = list(filter(lambda x: len(x) > 1, dict.values()))
     if len(results) > 0:
         print('Duplicates Found:')
         print('The following files are identical. The name could differ, but the content is identical')
