@@ -8,7 +8,7 @@ def find_dup(parent_folder):
     # Dups in format {hash:[names]}
     dups = {}
     for dir_name, subdirs, file_list in os.walk(parent_folder):
-        print(f'Scanning {dir_name}...' % dir_name)
+        print(f'Scanning {dir_name}...')
         for filename in file_list:
             path = os.path.join(dir_name, filename)  # Get the path to the file
             file_hash = hashfile(path)  # Calculate hash
