@@ -66,6 +66,6 @@ class File():
             self.file_add_times.append(datetime.datetime.now())
         else:
             print(f'Error - Updated file version has different extension!')
-            print(f'Expected: {self.extension}  Recieved: ...{filepath[-15:]}'
+            print(f'Expected: {self.extension}  Recieved: ...{filepath[-15:]}')
             print('File version update not saved.\n')
 

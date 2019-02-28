@@ -6,6 +6,7 @@ from tkinter import filedialog
 
 import os
 from stability.tools import dup_finder
+from stability.projects import Project, File
 
 
 class GUI(tkinter.Frame):
@@ -19,6 +20,9 @@ class GUI(tkinter.Frame):
 
         self.check_dups_btn = tkinter.Button(text='Find Dup Files', command=self.find_dup_files, **btn_kwargs())
         self.check_dups_btn.grid(row=0, column=0, **btn_grid_kwargs())
+
+        self.new_proj_btn = tkinter.Button(text='New Project', command=self.new_projecct)
+        self.new_proj_btn.grid(row=1, column=0)
 
         self.grid()
 

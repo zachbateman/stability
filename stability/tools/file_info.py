@@ -20,4 +20,3 @@ class FileData():
     def size(self) -> float:
         '''Return size of file in kilobytes (KB)'''
         return os.path.getsize(self.filepath) / 1000
-
