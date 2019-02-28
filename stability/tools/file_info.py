@@ -12,7 +12,7 @@ class FileData():
 
 
     @property
-    def last_modified(self):
+    def last_modified_time(self):
         '''Return last time file was modified'''
         return os.path.getmtime(self.filepath)
 
