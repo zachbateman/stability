@@ -21,7 +21,7 @@ class GUI(tkinter.Frame):
         self.check_dups_btn = tkinter.Button(text='Find Dup Files', command=self.find_dup_files, **btn_kwargs())
         self.check_dups_btn.grid(row=0, column=0, **btn_grid_kwargs())
 
-        self.new_proj_btn = tkinter.Button(text='New Project', command=self.new_projecct)
+        self.new_proj_btn = tkinter.Button(text='New Project', command=self.new_project)
         self.new_proj_btn.grid(row=1, column=0)
 
         self.grid()
@@ -33,6 +33,29 @@ class GUI(tkinter.Frame):
         print(f'Searching {directory} for duplicate files.\n')
         dups = dup_finder.find_dup(directory)
         dup_finder.print_results(dups)
+
+    def new_project(self):
+        popup = tkinter.Toplevel()
+        popup.wm_title('New Project')
+
+        proj_name_lbl = tkinter.Label(popup, text='New Project Name')
+        proj_name_lbl.grid(row=0, column=0)
+        proj_name_entry = tkinter.Entry(popup)
+        proj_name_entry.grid(row=0, column=1)
+
+        initial_dir = ''
+        def grab_directory():
+            selected_folder = filedialog.askdirectory()
+            initial_dir = selected_folder
+            return selected_folder
+
+        proj_initital_dir_lbl = tkinter.Label(popup, text='Select initial directory')
+        proj_initital_dir_lbl.grid(row=1, column=0)
+        proj_initital_dir_btn = tkinter.Button(popup, text='Folder', command=grab_directory)
+        proj_initital_dir_btn.grid(row=1, column=1)
+
+        create_proj_btn = tkinter.Button(popup, text='Create Project', command=popup.destroy)
+        create_proj_btn.grid(row=2, column=0, columnspan=2)
 
 
 def btn_kwargs() -> dict:
