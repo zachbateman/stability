@@ -13,7 +13,7 @@ class GUI(tkinter.Frame):
 
     def __init__(self, root, *args, **kwargs):
         tkinter.Frame.__init__(self, root, *args, **kwargs)
-        root.title('Stability')
+        root.title(f'Welcome to Stability, {os.getlogin()}')
         root.iconbitmap(bitmap=os.path.join(os.path.dirname(__file__), 'resources', 'transparent.ico'))
         root.configure(background='#cfd2d2')
         root.geometry('600x450')  # size of initial window in pixels
@@ -21,8 +21,11 @@ class GUI(tkinter.Frame):
         self.check_dups_btn = tkinter.Button(text='Find Dup Files', command=self.find_dup_files, **btn_kwargs())
         self.check_dups_btn.grid(row=0, column=0, **btn_grid_kwargs())
 
-        self.new_proj_btn = tkinter.Button(text='New Project', command=self.new_project)
-        self.new_proj_btn.grid(row=1, column=0)
+        self.new_proj_btn = tkinter.Button(text='New Project', command=self.new_project, **btn_kwargs())
+        self.new_proj_btn.grid(row=1, column=0, **btn_grid_kwargs())
+
+        self.print_proj_btn = tkinter.Button(text='Print Projects', command=self.print_projects, **btn_kwargs())
+        self.print_proj_btn.grid(row=2, column=0, **btn_grid_kwargs())
 
         self.grid()
 
@@ -51,11 +54,15 @@ class GUI(tkinter.Frame):
 
         proj_initital_dir_lbl = tkinter.Label(popup, text='Select initial directory')
         proj_initital_dir_lbl.grid(row=1, column=0)
-        proj_initital_dir_btn = tkinter.Button(popup, text='Folder', command=grab_directory)
-        proj_initital_dir_btn.grid(row=1, column=1)
+        proj_initital_dir_btn = tkinter.Button(popup, text='Folder', command=grab_directory, **btn_kwargs())
+        proj_initital_dir_btn.grid(row=1, column=1, **btn_grid_kwargs())
 
-        create_proj_btn = tkinter.Button(popup, text='Create Project', command=popup.destroy)
-        create_proj_btn.grid(row=2, column=0, columnspan=2)
+        create_proj_btn = tkinter.Button(popup, text='Create Project', command=popup.destroy, **btn_kwargs())
+        create_proj_btn.grid(row=2, column=0, columnspan=2, **btn_grid_kwargs())
+
+    def print_projects(self):
+        for proj in self.projects:
+            print(proj)
 
 
 def btn_kwargs() -> dict:
