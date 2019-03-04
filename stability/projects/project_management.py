@@ -18,7 +18,7 @@ class Project():
         self.create_project_archive()
 
 
-    def create_project_archive(self, starting_path: str='C:'):
+    def create_project_archive(self, starting_path: str='C:/'):
         self.archive_path = os.path.join(starting_path, 'stability', 'project_archives', self.name.lower())
         try:
             os.makedirs(self.archive_path)

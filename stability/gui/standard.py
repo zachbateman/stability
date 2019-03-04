@@ -58,6 +58,7 @@ class GUI(tkinter.Frame):
 
         initial_dir = ''
         def grab_directory():
+            popup.focus()
             initial_dir = filedialog.askdirectory()
             popup.focus()
 
