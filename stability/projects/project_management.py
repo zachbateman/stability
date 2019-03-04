@@ -1,6 +1,7 @@
 '''
 Python module containing Project management code.
 '''
+import os
 import datetime
 import shutil
 from stability.tools import FileData
@@ -39,6 +40,9 @@ class Project():
         else:
             file = file_version
         shutil.copy(file, self.archive_path)
+
+    def __repr__(self):
+        return f'Project: {self.name}'
 
 
 
