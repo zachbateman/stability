@@ -4,7 +4,39 @@ Python module containing Project management code.
 import os
 import datetime
 import shutil
+import pickle
 from stability.tools import FileData
+
+
+class ProjectGroup():
+    '''
+    Class for handling all of the user's Projects
+    '''
+    def __init__(self) -> None:
+        self.projects: dict = self.load_all_existing_projects()
+        self.archived_projects: dict = self.load_all_archived_projects()
+
+    def load_all_existing_projects(self) -> dict:
+        projects = {'project 1': ...}
+        return projects
+
+    def load_all_archived_projects(self) -> dict:
+        pass
+
+    def save_projects(self, starting_path: str='C:/'):
+        dump_dir = os.path.join(starting_path, 'stability', project_group.pickle)
+        pickle.dump(self, dump_dir)
+        print('Projects saved.')
+
+    def add_new_project(self, project_name: str, initial_folder: str) -> None:
+        pass
+
+    def archive_project(self, project_name: str) -> None:
+        pass
+
+    def delete_archived_project(self, project_name: str) -> None:
+        pass
+
 
 
 class Project():

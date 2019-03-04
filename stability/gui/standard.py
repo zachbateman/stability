@@ -3,7 +3,6 @@ Standard tkinter GUI for stability project.
 '''
 import tkinter
 from tkinter import filedialog
-
 import os
 from stability.tools import dup_finder
 from stability.projects import Project, File
