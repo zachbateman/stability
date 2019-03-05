@@ -21,6 +21,12 @@ class GUI(tkinter.Frame):
         # self.project_names = tkinter.StringVar()
         self.projects: list = []
 
+        # Menu
+        self.menu = tkinter.Menu(root)
+        self.menu.add_command(label='File')
+        self.menu.add_command(label='Help')
+        root.config(menu=self.menu)
+
         # GUI widgets
         self.check_dups_btn = tkinter.Button(text='Find Dup Files', command=self.find_dup_files, **btn_kwargs())
         self.check_dups_btn.grid(row=0, column=0, **btn_grid_kwargs())
