@@ -4,7 +4,7 @@ Python module containing Project management code.
 import os
 import datetime
 import shutil
-import pickle
+import json
 from stability.tools import FileData
 
 
@@ -16,7 +16,11 @@ class ProjectGroup():
         self.projects: dict = self.load_all_existing_projects()
         self.archived_projects: dict = self.load_all_archived_projects()
 
+
     def load_all_existing_projects(self) -> dict:
+        with open(self._saved_group_filepath()) as json_file:
+            # LOAD DATA
+            pass
         projects = {'project 1': ...}
         return projects
 
@@ -24,9 +28,12 @@ class ProjectGroup():
         pass
 
     def save_projects(self, starting_path: str='C:/'):
-        dump_dir = os.path.join(starting_path, 'stability', project_group.pickle)
-        pickle.dump(self, dump_dir)
+        with open(self._saved_group_filepath()) as json_file:
+            json.dump(object, json_file)
         print('Projects saved.')
+
+    def _saved_group_filepath(self) -> str:
+        return os.path.join(starting_path, 'stability', 'project_group.json')
 
     def add_new_project(self, project_name: str, initial_folder: str) -> None:
         pass
@@ -37,6 +44,13 @@ class ProjectGroup():
     def delete_archived_project(self, project_name: str) -> None:
         pass
 
+    def __repr__(self) -> str:
+        return f'Project Group: {"\n  - " + k for k in  self.projects.keys()}\n'
+
+    def asdict(self) -> dict:
+        '''Convert instance into representative dict'''
+        # TODO
+        return {}
 
 
 class Project():
@@ -73,9 +87,13 @@ class Project():
             file = file_version
         shutil.copy(file, self.archive_path)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'Project: {self.name}'
 
+    def asdict(self) -> dict:
+        '''Convert instance into representative dict'''
+        # TODO
+        return {}
 
 
 class File():
@@ -105,3 +123,10 @@ class File():
             print(f'Expected: {self.extension}  Recieved: ...{filepath[-15:]}')
             print('File version update not saved.\n')
 
+    def __repr__(self) -> str:
+        return f'File: {self.file_name}'
+
+    def asdict(self) -> dict:
+        '''Convert instance into representative dict'''
+        # TODO
+        return {}
