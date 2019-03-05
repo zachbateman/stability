@@ -45,7 +45,7 @@ class ProjectGroup():
         pass
 
     def __repr__(self) -> str:
-        return f'Project Group: {"\n  - " + k for k in  self.projects.keys()}\n'
+        return 'Project Group: ' + '\n  - '.join(self.projects.keys()) + '\n'
 
     def asdict(self) -> dict:
         '''Convert instance into representative dict'''
