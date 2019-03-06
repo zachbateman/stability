@@ -98,14 +98,20 @@ class Project():
 
 class File():
 
-    def __init__(self, file_path: str, file_name: str) -> None:
-        self.initial_filepath = file_path
+    def __init__(self, initial_filepath: str, file_name: str, **kwargs) -> None:
+        self.initial_filepath = initial_filepath
         self.file_name = file_name  # not necessarily the _actual_ name of the file
+
+
+
         self.initial_tracking_date = datetime.datetime.now()
 
         self.filedatas: list = [FileData(initial_filepath)]  # FileData objects
         self.file_add_times: list = [datetime.datetime.now()]
         self.extension = self.filedatas[0].extension
+
+        for key in kwargs:
+            setattr(self, key, kwargs[key])
 
     @property
     def num_versions(self):
@@ -126,7 +132,28 @@ class File():
     def __repr__(self) -> str:
         return f'File: {self.file_name}'
 
+    def __eq__(self, other) -> bool:
+        if (self.initial_filepath == other.initial_filepath
+            and self.file_name == other.file_name
+            and self.initial_tracking_date == other.initial_tracking_date):
+            return True
+        breakpoint()
+        return False
+
     def asdict(self) -> dict:
         '''Convert instance into representative dict'''
-        # TODO
-        return {}
+        d = {}
+        d['initial_filepath'] = self.initial_filepath
+        d['file_name'] = self.file_name
+        d['initial_tracking_date'] = self.initial_tracking_date
+        d['filedatas'] = [fd.filepath for fd in self.filedatas]
+        d['file_add_times'] = self.file_add_times
+        d['extension'] = self.extension
+        return d
+
+    @classmethod
+    def fromdict(cls, d):
+        '''Create class instance from dict'''
+        kwargs = {k: v for k, v in d.items()}
+        kwargs['filedatas'] = [FileData(fp) for fp in d['filedatas']]
+        return cls(d['initial_filepath'], d['file_name'], kwargs=kwargs)

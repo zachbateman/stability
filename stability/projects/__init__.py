@@ -1,4 +1,4 @@
 '''
 Stability projects subproject.
 '''
-from .project_management import Project, File
+from .project_management import ProjectGroup, Project, File
