@@ -9,7 +9,6 @@ from stability.tools import FileData
 from pprint import pprint as pp
 
 DATE_FORMAT = '%b %d %Y %H:%M:%S'  # for use with strftime and strptime
-# DATE_FORMAT = '%B %d %Y'
 
 
 class ProjectGroup():
@@ -62,7 +61,10 @@ class Project():
     def __init__(self, project_name: str='', initial_folder: str='', **kwargs) -> None:
         self.name = project_name
         self.initial_folder = initial_folder
-        self.project_creation_date = datetime.datetime.now()
+
+        # Now convert datetime.now() to a _ROUNDED_ time via DATE_FORMAT
+        # Provides same date after using .asdict() and .fromdict() conversion.
+        self.project_creation_date = datetime.datetime.strptime(datetime.datetime.now().strftime(DATE_FORMAT), DATE_FORMAT)
 
         self.files: dict = {}  # dict of File objects (which each contain list of FileData objects)
         self.create_project_archive()
@@ -103,7 +105,6 @@ class Project():
 
     def __eq__(self, other) -> bool:
         if (self.name == other.name
-            and self.file_name == other.file_name
             and self.initial_folder == other.initial_folder
             and self.project_creation_date == other.project_creation_date):
             return True
@@ -123,6 +124,7 @@ class Project():
     def fromdict(cls, d):
         '''Create class instance from dict'''
         kwargs = {k: v for k, v in d.items()}
+        kwargs['project_creation_date'] = datetime.datetime.strptime(d['project_creation_date'], DATE_FORMAT)
         kwargs['files'] = {file_name: File.fromdict(file_dict) for file_name, file_dict in d['files'].items()}
         return cls(**kwargs)
 
@@ -137,7 +139,7 @@ class File():
         self.initial_filepath = initial_filepath
         self.file_name = file_name  # not necessarily the _actual_ name of the file
 
-        # Now convert datetime.now() to a time rounded via DATE_FORMAT
+        # Now convert datetime.now() to a _ROUNDED_ time via DATE_FORMAT
         # Provides same date after using .asdict() and .fromdict() conversion.
         self.initial_tracking_date = datetime.datetime.strptime(datetime.datetime.now().strftime(DATE_FORMAT), DATE_FORMAT)
 
