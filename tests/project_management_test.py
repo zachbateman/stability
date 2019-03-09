@@ -7,15 +7,16 @@ sys.path.insert(1, '..')
 import time
 import os
 import stability
+from pprint import pprint as pp
 
 
 class TestFile(unittest.TestCase):
 
     @classmethod
     def setUpClass(TestFile):
-        print(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static_test_file.txt'))
-        TestFile.fdata = stability.File(os.path.join(__file__, 'static_test_file.txt'), 'Static Test File')
-        print(TestFile.fdata)
+        # print(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static_test_file.txt'))
+        TestFile.fdata = stability.File(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static_test_file.txt'), 'Static Test File')
+        # print(TestFile.fdata)
 
     def test_asdict(self):
         equiv_dict = self.fdata.asdict()
@@ -23,6 +24,27 @@ class TestFile(unittest.TestCase):
         remade_File = stability.File.fromdict(equiv_dict)
         self.assertTrue(remade_File == self.fdata)
         self.assertTrue(remade_File.asdict() == self.fdata.asdict())
+
+'''
+class TestProject(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(TestProject):
+        # print(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static_test_file.txt'))
+        TestProject.fdata = stability.File(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static_test_file.txt'), 'Static Test File #1')
+        TestProject.fdata2 = stability.File(os.path.join(__file__, 'static_test_file2.txt'), 'Static Test File #2')
+        TestProject.project = stability.Project('Project Test A', os.path.abspath(__file__))
+        TestProject.project.add_file(file_obj=TestProject.fdata)
+        TestProject.project.add_file(file_obj=TestProject.fdata2)
+        # print(TestFile.fdata)
+
+    def test_asdict(self):
+        equiv_dict = self.project.asdict()
+        self.assertTrue(type(equiv_dict) == dict)
+        remade_Project = stability.Project.fromdict(equiv_dict)
+        self.assertTrue(remade_Project == self.project)
+        self.assertTrue(remade_Project.asdict() == self.project.asdict())
+'''
 
 
 
