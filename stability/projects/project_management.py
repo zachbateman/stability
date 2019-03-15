@@ -15,31 +15,39 @@ class ProjectGroup():
     '''
     Class for handling all of the user's Projects
     '''
-    def __init__(self) -> None:
-        self.projects: dict = self.load_all_existing_projects()
-        self.archived_projects: dict = self.load_all_archived_projects()
+    def __init__(self, **kwargs) -> None:
+        self.projects: dict = {}
+        self.archived_projects: dict = {}
+
+        for key in kwargs:  # will only be triggered if using self.fromdict()
+            setattr(self, key, kwargs[key])
 
 
-    def load_all_existing_projects(self) -> dict:
-        with open(self._saved_group_filepath()) as json_file:
-            # LOAD DATA
-            pass
-        projects = {'project 1': ...}
-        return projects
-
-    def load_all_archived_projects(self) -> dict:
-        pass
+    def load_existing_projects(self) -> dict:
+        try:
+            with open(self._saved_group_filepath()) as json_file:
+                d = json.load(json_file)
+            for key in d:
+                setattr(self, key, d[key])
+        except FileNotFoundError:  # if user had not previously saved info
+            print('No existing projects found.')
 
     def save_projects(self, starting_path: str='C:/'):
-        with open(self._saved_group_filepath()) as json_file:
-            json.dump(object, json_file)
+        with open(self._saved_group_filepath(), 'w') as json_file:
+            json.dump(self.asdict(), json_file)
         print('Projects saved.')
 
-    def _saved_group_filepath(self) -> str:
+    def _saved_group_filepath(self, starting_path: str='C:/') -> str:
         return os.path.join(starting_path, 'stability', 'project_group.json')
 
-    def add_new_project(self, project_name: str, initial_folder: str) -> None:
-        pass
+    def add_new_project(self, project_name: str='', initial_folder: str='', proj_obj=None) -> None:
+        if proj_obj:
+            self.projects[proj_obj.name] = proj_obj
+            print(f'{proj_obj} added to Project Group!')
+        else:
+            self.projects[project_name] = Project(project_name=project_name, initial_folder=initial_folder)
+            print(f'{self.projects[project_name]} created!')
+        self.save_projects()
 
     def archive_project(self, project_name: str) -> None:
         pass
@@ -50,10 +58,26 @@ class ProjectGroup():
     def __repr__(self) -> str:
         return 'Project Group: ' + '\n  - '.join(self.projects.keys()) + '\n'
 
+    def __eq__(self, other) -> bool:
+        if (self.projects == other.projects
+            and self.archived_projects == other.archived_projects):
+            return True
+        return False
+
     def asdict(self) -> dict:
         '''Convert instance into representative dict'''
-        # TODO
-        return {}
+        d = {}
+        d['projects'] = {name: proj.asdict() for name, proj in self.projects.items()}
+        d['archived_projects'] = {name: proj.asdict() for name, proj in self.archived_projects.items()}
+        return d
+
+    @classmethod
+    def fromdict(cls, d):
+        '''Create class instance from dict'''
+        kwargs = {k: v for k, v in d.items()}
+        kwargs['projects'] = {name: Project.fromdict(d) for name, d in kwargs['projects'].items()}
+        kwargs['archived_projects'] = {name: Project.fromdict(d) for name, d in kwargs['archived_projects'].items()}
+        return cls(**kwargs)
 
 
 class Project():
@@ -82,11 +106,11 @@ class Project():
 
     def add_file(self, file_path: str='', file_name: str='', file_obj=None):
         if file_obj:
-            file_name = file_obj.file_name
-            self.files[file_name] = file_obj
+            self.files[file_obj.file_name] = file_obj
+            self.copy_file_to_project_archive(file_obj.file_name)
         else:
             self.files[file_name] = File(file_path, file_name)
-        self.copy_file_to_project_archive(file_name)
+            self.copy_file_to_project_archive(file_name)
 
     def copy_file_to_project_archive(self, file_name: str, file_version: str='latest'):
         '''
@@ -144,7 +168,7 @@ class File():
         self.initial_tracking_date = datetime.datetime.strptime(datetime.datetime.now().strftime(DATE_FORMAT), DATE_FORMAT)
 
         self.filedatas: list = [FileData(initial_filepath)]  # FileData objects
-        self.file_add_times: list = [datetime.datetime.now()]
+        self.file_add_times: list = [datetime.datetime.strptime(datetime.datetime.now().strftime(DATE_FORMAT), DATE_FORMAT)]
         self.extension = self.filedatas[0].extension
 
         for key in kwargs:
@@ -161,7 +185,7 @@ class File():
     def add_updated_fileversion(self, filepath):
         if os.path.splitext(filepath)[-1] == self.extension:
             self.filedatas.append(FileData(filename))
-            self.file_add_times.append(datetime.datetime.now())
+            self.file_add_times.append(datetime.datetime.strptime(datetime.datetime.now().strftime(DATE_FORMAT), DATE_FORMAT))
         else:
             print(f'Error - Updated file version has different extension!')
             print(f'Expected: {self.extension}  Recieved: ...{filepath[-15:]}')
@@ -184,7 +208,7 @@ class File():
         d['file_name'] = self.file_name
         d['initial_tracking_date'] = self.initial_tracking_date.strftime(DATE_FORMAT)
         d['filedatas'] = [fd.filepath for fd in self.filedatas]
-        d['file_add_times'] = self.file_add_times
+        d['file_add_times'] = [ftime.strftime(DATE_FORMAT) for ftime in self.file_add_times]
         d['extension'] = self.extension
         return d
 
@@ -194,4 +218,5 @@ class File():
         kwargs = {k: v for k, v in d.items()}
         kwargs['initial_tracking_date'] = datetime.datetime.strptime(d['initial_tracking_date'], DATE_FORMAT)
         kwargs['filedatas'] = [FileData(fp) for fp in d['filedatas']]
+        kwargs['file_add_times'] = [datetime.datetime.strptime(ftime, DATE_FORMAT) for ftime in d['file_add_times']]
         return cls(**kwargs)
