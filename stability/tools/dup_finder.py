@@ -4,8 +4,10 @@ Python script to find duplicate files.
 import os, sys
 import hashlib
 
-def find_dup(parent_folder):
-    # Dups in format {hash:[names]}
+
+
+def find_dup(parent_folder) -> dict:
+    '''Dups in format {hash:[names]}'''
     dups = {}
     for dir_name, subdirs, file_list in os.walk(parent_folder):
         print(f'Scanning {dir_name}...')
@@ -20,13 +22,14 @@ def find_dup(parent_folder):
     return dups
 
 
-# Joins two dictionaries
-def join_dicts(dict1, dict2):
+def join_dicts(dict1: dict, dict2: dict) -> dict:
+    '''Combines two dictionaries'''
     for key in dict2.keys():
         if key in dict1:
             dict1[key] = dict1[key] + dict2[key]
         else:
             dict1[key] = dict2[key]
+    return dict1
 
 
 def hashfile(path, blocksize=65536):
@@ -40,7 +43,7 @@ def hashfile(path, blocksize=65536):
     return hasher.hexdigest()
 
 
-def print_results(dict):
+def print_results(dict) -> None:
     results = list(filter(lambda x: len(x) > 1, dict.values()))
     if len(results) > 0:
         print('Duplicates Found:')
@@ -54,6 +57,7 @@ def print_results(dict):
         print('No duplicate files found.')
 
 
+
 if __name__ == '__main__':
     print(sys.argv)
     if len(sys.argv) > 1:
@@ -63,7 +67,7 @@ if __name__ == '__main__':
             # Iterate the folders given
             if os.path.exists(i):
                 # Find the duplicated files and append them to the dups
-                join_dicts(dups, find_dup(i))
+                dups = join_dicts(dups, find_dup(i))
             else:
                 print('%s is not a valid path, please verify' % i)
                 sys.exit()

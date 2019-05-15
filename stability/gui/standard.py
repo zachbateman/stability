@@ -8,6 +8,7 @@ from stability.tools import dup_finder
 from stability.projects import Project, File
 
 
+
 class GUI(tkinter.Frame):
 
     def __init__(self, root, *args, **kwargs):
@@ -88,8 +89,10 @@ class GUI(tkinter.Frame):
             print(proj)
 
 
+
 def btn_kwargs() -> dict:
     return {'bg': '#88aabb', 'width': 20}
+
 
 def btn_grid_kwargs() -> dict:
     '''Provides default kwargs to button widgets on .grid()'''
