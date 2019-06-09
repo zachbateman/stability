@@ -5,10 +5,12 @@ import os
 import datetime
 import shutil
 import json
+import copy
 from stability.tools import FileData
 from pprint import pprint as pp
 
 DATE_FORMAT = '%b %d %Y %H:%M:%S'  # for use with strftime and strptime
+
 
 
 class ProjectGroup():
@@ -74,10 +76,11 @@ class ProjectGroup():
     @classmethod
     def fromdict(cls, d):
         '''Create class instance from dict'''
-        kwargs = {k: v for k, v in d.items()}
+        kwargs = copy.deepcopy(d)
         kwargs['projects'] = {name: Project.fromdict(d) for name, d in kwargs['projects'].items()}
         kwargs['archived_projects'] = {name: Project.fromdict(d) for name, d in kwargs['archived_projects'].items()}
         return cls(**kwargs)
+
 
 
 class Project():
@@ -147,10 +150,11 @@ class Project():
     @classmethod
     def fromdict(cls, d):
         '''Create class instance from dict'''
-        kwargs = {k: v for k, v in d.items()}
+        kwargs = copy.deepcopy(d)
         kwargs['project_creation_date'] = datetime.datetime.strptime(d['project_creation_date'], DATE_FORMAT)
         kwargs['files'] = {file_name: File.fromdict(file_dict) for file_name, file_dict in d['files'].items()}
         return cls(**kwargs)
+
 
 
 class File():
@@ -215,7 +219,7 @@ class File():
     @classmethod
     def fromdict(cls, d):
         '''Create class instance from dict'''
-        kwargs = {k: v for k, v in d.items()}
+        kwargs = copy.deepcopy(d)
         kwargs['initial_tracking_date'] = datetime.datetime.strptime(d['initial_tracking_date'], DATE_FORMAT)
         kwargs['filedatas'] = [FileData(fp) for fp in d['filedatas']]
         kwargs['file_add_times'] = [datetime.datetime.strptime(ftime, DATE_FORMAT) for ftime in d['file_add_times']]
