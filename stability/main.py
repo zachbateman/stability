@@ -5,6 +5,5 @@ from .gui import GUI
 import tkinter
 
 def main():
-    root = tkinter.Tk()
-    GUI(root)
-    root.mainloop()
+    application = GUI()
+    application.mainloop()

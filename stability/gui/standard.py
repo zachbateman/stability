@@ -3,42 +3,33 @@ Standard tkinter GUI for stability project.
 '''
 import tkinter
 from tkinter import filedialog
+import easy_gui
 import os
 from stability.tools import dup_finder
 from stability.projects import Project, File
 
 
 
-class GUI(tkinter.Frame):
+class GUI(easy_gui.EasyGUI):
 
-    def __init__(self, root, *args, **kwargs):
-        tkinter.Frame.__init__(self, root, *args, **kwargs)
-        root.title(f'Welcome to Stability, {os.getlogin()}')
-        root.iconbitmap(bitmap=os.path.join(os.path.dirname(__file__), 'resources', 'transparent.ico'))
-        root.configure(background='#cfd2d2')
-        root.geometry('600x450')  # size of initial window in pixels
+    def __init__(self, *args, **kwargs):
+        super().__init__()
+
+        self.title(f'Welcome to Stability, {os.getlogin()}')
+        self.iconbitmap(bitmap=os.path.join(os.path.dirname(__file__), 'resources', 'transparent.ico'))
 
         # Variables
         # self.project_names = tkinter.StringVar()
         self.projects: list = []
 
         # Menu
-        self.menu = tkinter.Menu(root)
-        self.menu.add_command(label='File')
-        self.menu.add_command(label='Help')
-        root.config(menu=self.menu)
+        self.add_menu(commands={'File': lambda: print('File button'), 'Help': lambda: print('Help')})
 
         # GUI widgets
-        self.check_dups_btn = tkinter.Button(text='Find Dup Files', command=self.find_dup_files, **btn_kwargs())
-        self.check_dups_btn.grid(row=0, column=0, **btn_grid_kwargs())
-
-        self.new_proj_btn = tkinter.Button(text='New Project', command=self.new_project, **btn_kwargs())
-        self.new_proj_btn.grid(row=1, column=0, **btn_grid_kwargs())
-
-        self.print_proj_btn = tkinter.Button(text='Print Projects', command=self.print_projects, **btn_kwargs())
-        self.print_proj_btn.grid(row=2, column=0, **btn_grid_kwargs())
-
-        self.grid()
+        section1 = self.add_section('section1', return_section=True)
+        section1.add_widget('btn', text='Find Dup Files', command=self.find_dup_files)
+        section1.add_widget('btn', text='New Project', command=self.new_project)
+        section1.add_widget('btn', text='Print Projects', command=self.print_projects)
 
 
     def find_dup_files(self):
@@ -90,18 +81,7 @@ class GUI(tkinter.Frame):
 
 
 
-def btn_kwargs() -> dict:
-    return {'bg': '#88aabb', 'width': 20}
-
-
-def btn_grid_kwargs() -> dict:
-    '''Provides default kwargs to button widgets on .grid()'''
-    return {'padx': 6, 'pady': 6}
-
-
-
 
 if __name__ == '__main__':
-    root = tkinter.Tk()
-    application = GUI(root)
-    root.mainloop()
+    application = GUI()
+    application.mainloop()
