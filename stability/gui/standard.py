@@ -27,19 +27,19 @@ class GUI(easy_gui.EasyGUI):
 
         # GUI widgets
         section1 = self.add_section('section1', return_section=True)
-        section1.add_widget('btn', text='Find Dup Files', command=self.find_dup_files)
-        section1.add_widget('btn', text='New Project', command=self.new_project)
-        section1.add_widget('btn', text='Print Projects', command=self.print_projects)
+        section1.add_widget('btn', text='Find Dup Files', command_func=self.find_dup_files)
+        section1.add_widget('btn', text='New Project', command_func=self.new_project)
+        section1.add_widget('btn', text='Print Projects', command_func=self.print_projects)
 
 
-    def find_dup_files(self):
+    def find_dup_files(self, *args):
         os.system('cls')
         directory = filedialog.askdirectory()
         print(f'Searching {directory} for duplicate files.\n')
         dups = dup_finder.find_dup(directory)
         dup_finder.print_results(dups)
 
-    def new_project(self):
+    def new_project(self, *args):
         popup = tkinter.Toplevel()
         popup.wm_title('New Project')
         popup.iconbitmap(bitmap=os.path.join(os.path.dirname(__file__), 'resources', 'transparent.ico'))
@@ -75,7 +75,7 @@ class GUI(easy_gui.EasyGUI):
         create_proj_btn = tkinter.Button(popup, text='Create Project', command=create_project, **btn_kwargs())
         create_proj_btn.grid(row=2, column=0, columnspan=2, **btn_grid_kwargs())
 
-    def print_projects(self):
+    def print_projects(self, *args):
         for proj in self.projects:
             print(proj)
 
@@ -83,5 +83,4 @@ class GUI(easy_gui.EasyGUI):
 
 
 if __name__ == '__main__':
-    application = GUI()
-    application.mainloop()
+    GUI().create_gui()
