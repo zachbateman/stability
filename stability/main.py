@@ -5,4 +5,4 @@ from .gui import GUI
 import tkinter
 
 def main():
-    GUI().create_gui()
+    GUI()

@@ -13,8 +13,6 @@ from stability.projects import Project, File
 class GUI(easy_gui.EasyGUI):
 
     def __init__(self, *args, **kwargs):
-        super().__init__()
-
         self.title(f'Welcome to Stability, {os.getlogin()}')
         self.iconbitmap(bitmap=os.path.join(os.path.dirname(__file__), 'resources', 'transparent.ico'))
 
