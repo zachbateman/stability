@@ -24,7 +24,7 @@ class GUI(easy_gui.EasyGUI):
         self.add_menu(commands={'File': lambda: print('File button'), 'Help': lambda: print('Help')})
 
         # GUI widgets
-        section1 = self.add_section('section1', return_section=True)
+        section1 = self.add_section('section1')
         section1.add_widget('btn', text='Find Dup Files', command_func=self.find_dup_files)
         section1.add_widget('btn', text='New Project', command_func=self.new_project)
         section1.add_widget('btn', text='Print Projects', command_func=self.print_projects)
@@ -81,4 +81,4 @@ class GUI(easy_gui.EasyGUI):
 
 
 if __name__ == '__main__':
-    GUI().create_gui()
+    GUI()
